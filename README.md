@@ -1,4 +1,6 @@
-# Welcome to your Lovable project
+# K-Map Wizardry Unlocked
+
+An interactive Karnaugh Map (K-Map) solver and digital logic simplification tool.
 
 ## Project info
 

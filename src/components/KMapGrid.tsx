@@ -1,5 +1,5 @@
 import { forwardRef, useMemo } from 'react';
-import { getGrayCodeLabels, getVariableNames, getMintermFromPosition, Group } from '@/lib/kmap-solver';
+import { getKMapHeaderConfig, getVariableNames, getMintermFromPosition, Group } from '@/lib/kmap-solver';
 
 interface KMapGridProps {
   variables: number;
@@ -11,30 +11,10 @@ export const KMapGrid = forwardRef<HTMLDivElement, KMapGridProps>(
   ({ variables, grid, groups }, ref) => {
     const varNames = getVariableNames(variables);
     
-    const { rowLabels, colLabels, rowVars, colVars } = useMemo(() => {
-      if (variables === 2) {
-        return {
-          rowLabels: ['0', '1'],
-          colLabels: ['0', '1'],
-          rowVars: varNames[0],
-          colVars: varNames[1]
-        };
-      }
-      if (variables === 3) {
-        return {
-          rowLabels: ['0', '1'],
-          colLabels: getGrayCodeLabels(2),
-          rowVars: varNames[0],
-          colVars: `${varNames[1]}${varNames[2]}`
-        };
-      }
-      return {
-        rowLabels: getGrayCodeLabels(2),
-        colLabels: getGrayCodeLabels(2),
-        rowVars: `${varNames[0]}${varNames[1]}`,
-        colVars: `${varNames[2]}${varNames[3]}`
-      };
-    }, [variables, varNames]);
+    const { rowLabels, colLabels, rowVars, colVars } = useMemo(
+      () => getKMapHeaderConfig(variables, varNames),
+      [variables, varNames]
+    );
 
     const getCellColor = (row: number, col: number): string | null => {
       const minterm = getMintermFromPosition(variables, row, col);

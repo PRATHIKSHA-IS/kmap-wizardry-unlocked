@@ -1,5 +1,5 @@
 import { useState, useEffect, forwardRef } from 'react';
-import { getGrayCodeLabels, getVariableNames, getMintermFromPosition } from '@/lib/kmap-solver';
+import { getKMapHeaderConfig, getVariableNames, getMintermFromPosition } from '@/lib/kmap-solver';
 
 interface InteractiveKMapProps {
   variables: number;
@@ -46,30 +46,7 @@ export const InteractiveKMap = forwardRef<HTMLDivElement, InteractiveKMapProps>(
       });
     };
     
-    const { rowLabels, colLabels, rowVars, colVars } = (() => {
-      if (variables === 2) {
-        return {
-          rowLabels: ['0', '1'],
-          colLabels: ['0', '1'],
-          rowVars: varNames[0],
-          colVars: varNames[1]
-        };
-      }
-      if (variables === 3) {
-        return {
-          rowLabels: ['0', '1'],
-          colLabels: getGrayCodeLabels(2),
-          rowVars: varNames[0],
-          colVars: `${varNames[1]}${varNames[2]}`
-        };
-      }
-      return {
-        rowLabels: getGrayCodeLabels(2),
-        colLabels: getGrayCodeLabels(2),
-        rowVars: `${varNames[0]}${varNames[1]}`,
-        colVars: `${varNames[2]}${varNames[3]}`
-      };
-    })();
+    const { rowLabels, colLabels, rowVars, colVars } = getKMapHeaderConfig(variables, varNames);
 
     const clearAll = () => {
       setCellStates(getInitialGrid());

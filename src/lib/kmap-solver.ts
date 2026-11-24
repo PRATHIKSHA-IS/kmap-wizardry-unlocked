@@ -24,6 +24,13 @@ export interface KMapResult {
   posTerms: string[];
 }
 
+export interface KMapHeaderConfig {
+  rowLabels: string[];
+  colLabels: string[];
+  rowVars: string;
+  colVars: string;
+}
+
 const GROUP_COLORS = [
   'hsl(185, 80%, 50%)',    // cyan
   'hsl(310, 80%, 55%)',    // magenta
@@ -50,6 +57,32 @@ export function getGrayCodeLabels(bits: number): string[] {
 
 export function getVariableNames(count: number): string[] {
   return ['A', 'B', 'C', 'D'].slice(0, count);
+}
+
+export function getKMapHeaderConfig(variables: number, varNames?: string[]): KMapHeaderConfig {
+  const names = varNames || getVariableNames(variables);
+  if (variables === 2) {
+    return {
+      rowLabels: ['0', '1'],
+      colLabels: ['0', '1'],
+      rowVars: names[0] || 'A',
+      colVars: names[1] || 'B',
+    };
+  }
+  if (variables === 3) {
+    return {
+      rowLabels: ['0', '1'],
+      colLabels: getGrayCodeLabels(2),
+      rowVars: names[0] || 'A',
+      colVars: `${names[1] || 'B'}${names[2] || 'C'}`,
+    };
+  }
+  return {
+    rowLabels: getGrayCodeLabels(2),
+    colLabels: getGrayCodeLabels(2),
+    rowVars: `${names[0] || 'A'}${names[1] || 'B'}`,
+    colVars: `${names[2] || 'C'}${names[3] || 'D'}`,
+  };
 }
 
 export function createKMapGrid(variables: number, minterms: number[], dontCares: number[] = []): number[][] {
